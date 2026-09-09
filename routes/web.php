@@ -1,7 +1,8 @@
 <?php
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskController;
 
-use Illuminate\Support\Facades\Route;
-
+// halaman utama
 Route::get('/', function () {
-    return view('welcome');
+    return view('projects.show');
 });
