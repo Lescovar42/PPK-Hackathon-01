@@ -1,8 +1,25 @@
-<?php
+﻿<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Models\User;
 
-// halaman utama
 Route::get('/', function () {
-    return view('projects.show');
+    $users = User::all();
+    return view('welcome', compact('users'));
 });
+
+// Rute Crew 1: Project & Task
+Route::get('/projects', function () {
+    return view('projects.show');
+})->name('projects.index');
+Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+Route::post('/projects/{project}/tasks', [TaskController::class, 'store'])->name('tasks.store');
+Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggleStatus'])->name('tasks.toggle');
+
+// Rute Crew 3: Admin
+Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.index');
+Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.store');
+Route::delete('/admin/users/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
