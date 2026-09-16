@@ -18,4 +18,17 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
         );
+    })
+
+    ->withMiddleware(function (Middleware $middleware): void {
+
+    $middleware->alias([
+
+        'owner' => \App\Http\Middleware\CheckOwner::class,
+
+        'admin' => \App\Http\Middleware\CheckAdmin::class,
+
+    ]);
+
+
     })->create();
