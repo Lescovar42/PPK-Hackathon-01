@@ -1,6 +1,7 @@
-﻿<?php
+<?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ListController;
 use App\Http\Controllers\ProjectCollaborationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
