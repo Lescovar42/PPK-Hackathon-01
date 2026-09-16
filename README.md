@@ -14,6 +14,26 @@
 
 ---
 
+## 📋 Software Requirements Specification (SRS)
+
+### 1. User Roles (Peran Pengguna)
+- **Admin:** Administrator sistem yang bertanggung jawab mengelola (menambah dan menghapus) akun pengguna secara global.
+- **Owner (Pemilik Daftar):** Pengguna yang membuat suatu daftar tugas/proyek. Memiliki hak penuh untuk menambah anggota dan menghapus daftar tersebut.
+- **Member (Anggota Daftar):** Pengguna yang diundang oleh Owner ke dalam sebuah daftar untuk berkolaborasi, mengerjakan tugas, dan memantau progres penyelesaian.
+
+### 2. Functional Requirements (Kebutuhan Fungsional)
+- **FR-1 (Manajemen Tugas):** Sistem memungkinkan pengguna membuat, mengelompokkan, dan mengatur tugas ke dalam daftar proyek. Pengguna dapat menetapkan tenggat waktu (deadline) dan mengubah status tugas menjadi selesai.
+- **FR-2 (Manajemen Akun):** Sistem menyediakan antarmuka bagi Admin untuk menambah atau menghapus akun pengguna dari sistem.
+- **FR-3 (Otomatisasi Kepemilikan):** Sistem harus secara otomatis menetapkan pengguna yang membuat daftar tugas baru sebagai "Owner" dari daftar tersebut.
+- **FR-4 (Hapus Kaskade):** Owner dapat menghapus daftar tugas miliknya. Sistem wajib menghapus daftar tersebut beserta seluruh tugas dan data keanggotaan di dalamnya secara otomatis (kaskade).
+
+### 3. Non-Functional Requirements (Kebutuhan Non-Fungsional)
+- **NFR-1 (Atomicity):** Proses penghapusan daftar dan isinya (FR-4) wajib dieksekusi dalam satu Transaksi Database (*Database Transaction*). Jika salah satu proses penghapusan gagal, seluruh perubahan harus dibatalkan (*Rollback*).
+- **NFR-2 (Otorisasi):** Sistem harus memvalidasi hak akses sebelum mengeksekusi aksi penting. Permintaan manipulasi data dari pihak yang tidak berwenang (misal: Member mencoba menghapus daftar) wajib ditolak.
+- **NFR-3 (Keamanan Data):** Seluruh input dari pengguna wajib divalidasi dengan ketat, dan seluruh interaksi dengan database wajib menggunakan *Prepared Statements* untuk mencegah celah keamanan *SQL Injection*.
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Backend:** Laravel (PHP)
