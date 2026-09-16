@@ -33,4 +33,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    // Project yang user miliki sebagai owner
+    public function ownedProjects()
+    {
+        return $this->hasMany(Project::class, 'owner_id');
+    }
+    
 }
