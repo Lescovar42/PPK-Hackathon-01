@@ -1,4 +1,4 @@
-# Jara - Collaborative Task Management Platform
+# Jara - Aplikasi Web untuk Mengelola Tugas Pribadi atau Tim
 
 **Jara** is a lightweight, fast, and secure collaborative task management web platform. Designed for simplicity, it allows individuals and teams to organize tasks, track deadlines, and manage project members efficiently.
 
@@ -62,7 +62,8 @@ php artisan key:generate
 # 4. Database Setup (Crucial - Resets DB and applies fresh schema)
 php artisan migrate:fresh --seed
 
-# 5. Run the server
+# 5. Run (different tab terminal)
+npm run build
 php artisan serve
 ```
 
