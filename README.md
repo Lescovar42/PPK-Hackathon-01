@@ -66,20 +66,3 @@ php artisan migrate:fresh --seed
 npm run build
 php artisan serve
 ```
-
-
-## 👨‍💻 Sprint: Stabilization & Security (1 Hour)
-
-To prevent Git merge conflicts, the current sprint is strictly divided. **Do not modify files outside your assigned scope.**
-
-| Crew | Focus Area | Core Responsibilities | Assigned Branch |
-| :--- | :--- | :--- | :--- |
-| **Dev 1** | **Legacy CRUD** | Fix previous WSoD. Ensure Task, Project, and Admin CRUD works. | `fix/legacy-crud` |
-| **Dev 2** | **Atomic Actions** | Auto-assign Ownership. Build Atomic Cascade Delete for Projects. | `feat/atomic-delete` |
-| **Dev 3** | **Security & Auth** | Implement Auth Middleware (Owner-only actions). Apply Prepared Statements. | `feat/security-auth` |
-
-### 🌿 Git Workflow
-1. Start from the main branch after the PM resolves the WSoD.
-2. `git checkout -b <your-branch-name>`.
-3. Code within your assigned Controllers/Models.
-4. Merge sequentially: **Dev 1** ➔ **Dev 2** ➔ **Dev 3**.
