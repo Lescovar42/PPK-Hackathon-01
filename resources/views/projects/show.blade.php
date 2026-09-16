@@ -1,97 +1,114 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Proyek: {{ $project->name }} - Jara</title>
-</head>
-<body style="font-family: Arial, sans-serif; margin: 40px; line-height: 1.6;">
+<x-layout title="Detail Proyek: {{ $project->name }} - Jara">
+    <x-page-header
+        title="Proyek: {{ $project->name }}"
+        description="Detail proyek dan manajemen daftar tugas tim."
+        backUrl="{{ route('projects.index') }}"
+        backLabel="Kembali ke Daftar Proyek"
+    >
+        <x-slot:actions>
+            <x-button href="{{ route('projects.collaboration', $project) }}" variant="secondary" size="sm">
+                <svg class="h-4 w-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>Kolaborasi & Progress</span>
+            </x-button>
+        </x-slot:actions>
+    </x-page-header>
 
-    <p>
-        <a href="{{ route('projects.index') }}">&larr; Kembali ke Daftar Proyek</a> |
-        <a href="{{ route('projects.collaboration', $project) }}">👥 Kolaborasi & Progress</a>
-    </p>
-
-    <h1>Proyek: {{ $project->name }}</h1>
-
-    @if(session('success'))
-        <p style="color: green; font-weight: bold;">{{ session('success') }}</p>
-    @endif
-
-    @if ($errors->any())
-        <div style="color: red;">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <!-- Form Tambah Tugas Baru -->
+        <div class="lg:col-span-1">
+            <x-card title="Tambah Tugas Baru" subtitle="Tambahkan pekerjaan ke dalam proyek ini">
+                <form action="{{ route('tasks.store', $project) }}" method="POST" class="space-y-4">
+                    @csrf
+                    <div>
+                        <x-input
+                            name="name"
+                            label="Nama Tugas"
+                            placeholder="Masukkan nama tugas"
+                            :value="old('name')"
+                            :required="true"
+                        />
+                    </div>
+                    <div>
+                        <x-input
+                            type="date"
+                            name="deadline"
+                            label="Deadline (Opsional)"
+                            :value="old('deadline')"
+                        />
+                    </div>
+                    <div class="pt-2">
+                        <x-button type="submit" class="w-full">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            </svg>
+                            <span>Tambah Tugas</span>
+                        </x-button>
+                    </div>
+                </form>
+            </x-card>
         </div>
-    @endif
 
-    <hr style="margin: 20px 0;">
-
-    <!-- Form Tambah Tugas Baru -->
-    <fieldset style="margin-bottom: 25px; padding: 15px; max-width: 500px;">
-        <legend><strong>Tambah Tugas Baru</strong></legend>
-        <form action="{{ route('tasks.store', $project) }}" method="POST">
-            @csrf
-            <div style="margin-bottom: 10px;">
-                <label for="name">Nama Tugas:</label><br>
-                <input type="text" id="name" name="name" value="{{ old('name') }}" required placeholder="Masukkan nama tugas" style="width: 100%; padding: 8px; box-sizing: border-box;">
-            </div>
-            <div style="margin-bottom: 10px;">
-                <label for="deadline">Deadline:</label><br>
-                <input type="date" id="deadline" name="deadline" value="{{ old('deadline') }}" style="width: 100%; padding: 8px; box-sizing: border-box;">
-            </div>
-            <button type="submit" style="padding: 8px 16px; cursor: pointer;">Tambah Tugas</button>
-        </form>
-    </fieldset>
-
-    <!-- Daftar Tugas Proyek -->
-    <h2>Daftar Tugas</h2>
-
-    @if($tasks->isEmpty())
-        <p>Belum ada tugas untuk proyek ini. Silakan tambahkan tugas di atas.</p>
-    @else
-        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; max-width: 800px;">
-            <thead>
-                <tr style="background: #f2f2f2;">
-                    <th style="width: 130px;">Status</th>
-                    <th>Nama Tugas</th>
-                    <th style="width: 130px;">Deadline</th>
-                    <th style="width: 160px;">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($tasks as $task)
-                <tr style="{{ $task->is_done ? 'background-color: #f9f9f9;' : '' }}">
-                    <td style="text-align: center;">
-                        @if($task->is_done)
-                            <span style="color: green; font-weight: bold;">✓ Selesai</span>
-                        @else
-                            <span style="color: orange; font-weight: bold;">⏳ Belum Selesai</span>
-                        @endif
-                    </td>
-                    <td style="{{ $task->is_done ? 'text-decoration: line-through; color: #888;' : 'font-weight: 500;' }}">
-                        {{ $task->name }}
-                    </td>
-                    <td style="text-align: center;">
-                        {{ $task->deadline ? $task->deadline->format('Y-m-d') : '-' }}
-                    </td>
-                    <td style="text-align: center;">
-                        <form action="{{ route('tasks.toggle', $task) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" style="padding: 4px 10px; cursor: pointer;">
-                                {{ $task->is_done ? 'Batal Selesai' : 'Tandai Selesai' }}
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-
-</body>
-</html>
+        <!-- Daftar Tugas Proyek -->
+        <div class="lg:col-span-2">
+            <x-card title="Daftar Tugas" subtitle="Tugas yang terdaftar untuk proyek ini">
+                @if($tasks->isEmpty())
+                    <div class="py-12 text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                        </div>
+                        <p class="mt-4 text-sm font-medium text-slate-600">Belum ada tugas untuk proyek ini. Silakan tambahkan tugas di atas.</p>
+                    </div>
+                @else
+                    <x-table>
+                        <thead class="bg-slate-50/80 text-xs uppercase font-semibold text-slate-500 tracking-wider">
+                            <tr>
+                                <th scope="col" class="px-4 py-3.5 text-center w-36">Status</th>
+                                <th scope="col" class="px-6 py-3.5">Nama Tugas</th>
+                                <th scope="col" class="px-4 py-3.5 text-center w-32">Deadline</th>
+                                <th scope="col" class="px-6 py-3.5 text-center w-40">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white">
+                            @foreach($tasks as $task)
+                                <tr class="transition-colors {{ $task->is_done ? 'bg-slate-50/50 hover:bg-slate-50' : 'hover:bg-slate-50/80' }}">
+                                    <td class="px-4 py-4 text-center whitespace-nowrap">
+                                        @if($task->is_done)
+                                            <x-badge variant="success" size="sm" :dot="true">Selesai</x-badge>
+                                        @else
+                                            <x-badge variant="warning" size="sm" :dot="true">Belum Selesai</x-badge>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <span class="{{ $task->is_done ? 'line-through text-slate-400' : 'font-medium text-slate-900' }}">
+                                            {{ $task->name }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-4 text-center text-xs text-slate-500 whitespace-nowrap">
+                                        {{ $task->deadline ? $task->deadline->format('Y-m-d') : '-' }}
+                                    </td>
+                                    <td class="px-6 py-4 text-center whitespace-nowrap">
+                                        <form action="{{ route('tasks.toggle', $task) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('PATCH')
+                                            <x-button
+                                                type="submit"
+                                                size="xs"
+                                                variant="{{ $task->is_done ? 'secondary' : 'primary' }}"
+                                            >
+                                                {{ $task->is_done ? 'Batal Selesai' : 'Tandai Selesai' }}
+                                            </x-button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </x-table>
+                @endif
+            </x-card>
+        </div>
+    </div>
+</x-layout>
