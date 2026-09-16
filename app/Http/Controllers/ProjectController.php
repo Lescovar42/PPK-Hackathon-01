@@ -24,6 +24,7 @@ class ProjectController extends Controller
 
         Project::create([
             'name' => $validated['name'],
+            'owner_id' => auth()->id(),
         ]);
 
         return redirect()->route('projects.index')->with('success', 'Proyek berhasil dibuat!');
