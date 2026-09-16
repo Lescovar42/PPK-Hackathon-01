@@ -10,21 +10,21 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-{
-    Schema::create('project_user', function (Blueprint $table) {
-        $table->foreignId('project_id')
-              ->constrained('projects')
-              ->cascadeOnDelete();
+    {
+        Schema::create('project_user', function (Blueprint $table) {
+            $table->foreignId('project_id')
+                ->constrained('projects')
+                ->cascadeOnDelete();
 
-        $table->foreignId('user_id')
-              ->constrained('users')
-              ->cascadeOnDelete();
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
 
-        $table->timestamps();
+            $table->timestamps();
 
-        $table->primary(['project_id', 'user_id']);
-    });
-}
+            $table->primary(['project_id', 'user_id']);
+        });
+    }
 
     /**
      * Reverse the migrations.

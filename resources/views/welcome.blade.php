@@ -2,70 +2,29 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Manajemen Akun - Admin Jara</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jara - Collaborative Task Management Platform</title>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 40px;">
+<body style="font-family: Arial, sans-serif; margin: 40px; line-height: 1.6;">
+    <h1>Selamat Datang di Jara</h1>
+    <p>Platform manajemen proyek dan tugas kolaboratif.</p>
 
-    <h2>Panel Admin: Manajemen Akun Pengguna</h2>
+    <hr style="margin: 20px 0;">
 
-    @if(session('success'))
-        <p style="color: green; font-weight: bold;">{{ session('success') }}</p>
-    @endif
-
-    <!-- Form Tambah Akun -->
-    <fieldset style="margin-bottom: 20px; padding: 15px;">
-        <legend><strong>Tambah Akun Baru</strong></legend>
-        <form action="{{ route('admin.store') }}" method="POST">
-            @csrf
-            <p>
-                <label>Nama:</label><br>
-                <input type="text" name="name" required>
-            </p>
-            <p>
-                <label>Email:</label><br>
-                <input type="email" name="email" required>
-            </p>
-            <p>
-                <label>Role:</label><br>
-                <select name="role">
-                    <option value="user">User (Biasa)</option>
-                    <option value="admin">Admin</option>
-                </select>
-            </p>
-            <button type="submit">Simpan Akun</button>
-        </form>
-    </fieldset>
-
-    <!-- Tabel Daftar Akun -->
-    <h3>Daftar Pengguna Sistem</h3>
-    <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-        <thead>
-            <tr style="background: #f2f2f2;">
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $u)
-            <tr>
-                <td>{{ $u->id }}</td>
-                <td>{{ $u->name }}</td>
-                <td>{{ $u->email }}</td>
-                <td>{{ $u->role }}</td>
-                <td>
-                    <form action="{{ route('admin.destroy', $u->id) }}" method="POST" onsubmit="return confirm('Yakin ingin hapus akun ini?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" style="color: red;">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
+    <h2>Menu Utama</h2>
+    <ul>
+        <li>
+            <a href="{{ route('projects.index') }}" style="font-size: 18px; font-weight: bold;">
+                📁 Manajemen Proyek & Tugas
+            </a>
+            <p>Kelola proyek, tambahkan tugas, atur deadline, dan pantau penyelesaian tugas.</p>
+        </li>
+        <li>
+            <a href="{{ route('admin.index') }}" style="font-size: 18px; font-weight: bold;">
+                ⚙️ Panel Admin (Manajemen Akun)
+            </a>
+            <p>Kelola akun pengguna, peran sistem (admin/user), dan akses pengguna.</p>
+        </li>
+    </ul>
 </body>
 </html>

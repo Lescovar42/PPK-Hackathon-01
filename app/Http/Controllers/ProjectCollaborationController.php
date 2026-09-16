@@ -41,7 +41,7 @@ class ProjectCollaborationController extends Controller
         ]);
 
         $project->users()->syncWithoutDetaching([
-            $request->user_id
+            $request->user_id,
         ]);
 
         return redirect()
