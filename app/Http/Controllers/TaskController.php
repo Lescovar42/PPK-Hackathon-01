@@ -17,13 +17,12 @@ class TaskController extends Controller
             'deadline' => 'nullable|date',
         ]);
 
-        $taskName = $request->filled('name')
-            ? $request->input('name')
-            : $request->input('title');
+        $taskName = $validated['name'] 
+            ?? $validated['title'];
 
         $project->tasks()->create([
             'name' => $taskName,
-            'deadline' => $request->filled('deadline') ? $request->input('deadline') : null,
+            'deadline' => $validated['deadline'] ?? null,
             // is_done tidak perlu diisi karena default false di database
         ]);
 
