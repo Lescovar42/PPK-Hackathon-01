@@ -12,32 +12,34 @@ class AdminController extends Controller
     public function index()
     {
         $users = User::all();
+
         return view('admin.index', compact('users'));
     }
 
     // Simpan akun baru
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|max:255|unique:users,email',
             'role' => 'required|in:admin,user',
         ]);
 
         User::create([
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => $validated['name'],
+            'email' => $validated['email'],
             'password' => Hash::make('password'),
-            'role' => $request->role,
+            'role' => $validated['role'],
         ]);
 
         return redirect()->route('admin.index')->with('success', 'Akun berhasil ditambahkan!');
     }
 
     // Hapus akun
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        User::findOrFail($id)->delete();
+        $user->delete();
+
         return redirect()->route('admin.index')->with('success', 'Akun berhasil dihapus!');
     }
 }
