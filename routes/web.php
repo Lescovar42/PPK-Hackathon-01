@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProjectCollaborationController;
@@ -25,3 +25,4 @@ Route::redirect('/admin', '/admin/users');
 Route::get('/admin/users', [AdminController::class, 'index'])->name('admin.index');
 Route::post('/admin/users', [AdminController::class, 'store'])->name('admin.store');
 Route::delete('/admin/users/{user}', [AdminController::class, 'destroy'])->name('admin.destroy');
+Route::delete('/lists/{id}', [ListController::class, 'destroy'])->middleware('owner');
