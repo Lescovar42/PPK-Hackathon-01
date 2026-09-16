@@ -5,6 +5,8 @@
     <title>Admin - Manajemen Akun</title>
 </head>
 <body>
+    <p><a href="{{ route('home') }}">&larr; Kembali ke Beranda</a> | <a href="{{ route('projects.index') }}">Daftar Proyek</a></p>
+
     <h1>Manajemen Akun (Admin)</h1>
 
     @if(session('success'))
@@ -27,17 +29,17 @@
         @csrf
         <div>
             <label>Nama:</label><br>
-            <input type="text" name="name" required>
+            <input type="text" name="name" value="{{ old('name') }}" required>
         </div>
         <div>
             <label>Email:</label><br>
-            <input type="email" name="email" required>
+            <input type="email" name="email" value="{{ old('email') }}" required>
         </div>
         <div>
             <label>Role:</label><br>
             <select name="role">
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
+                <option value="user" {{ old('role') === 'user' ? 'selected' : '' }}>User</option>
+                <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
             </select>
         </div><br>
         <button type="submit">Simpan</button>
@@ -65,7 +67,7 @@
                 <td>{{ $user->email }}</td>
                 <td>{{ $user->role }}</td>
                 <td>
-                    <form action="{{ route('admin.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
+                    <form action="{{ route('admin.destroy', $user) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus akun ini?')">
                         @csrf
                         @method('DELETE')
                         <button type="submit">Hapus</button>
